@@ -4,8 +4,8 @@ require File.expand_path('../lib/dekiru/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Akihiro Matsumura"]
   gem.email         = ["matsumura.aki@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Usefull helper methods for Ruby on Rails}
+  gem.summary       = %q{Usefull helper methods for Ruby on Rails}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "dekiru"
   gem.require_paths = ["lib"]
   gem.version       = Dekiru::VERSION
+
+  gem.add_development_dependency 'rake', [">= 0"]
 end

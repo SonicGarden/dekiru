@@ -1,6 +1,6 @@
 # Dekiru
 
-TODO: Write a gem description
+Usefull Helper methods for Ruby on Rails
 
 ## Installation
 
