@@ -39,8 +39,8 @@ EOF
       html.html_safe
     end
 
-    def google_analytics(code = nil)
-      if code && ::Rails.env == "production"
+    def google_analytics(code)
+      if code.present? && ::Rails.env == "production"
         html = <<-EOF
 <script type="text/javascript">
   var _gaq = _gaq || [];
