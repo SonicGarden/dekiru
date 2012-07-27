@@ -39,20 +39,24 @@ EOF
       html.html_safe
     end
 
-    def google_analytics(code)
+    def google_analytics(code, options = {})
       if code.present? && ::Rails.env == "production"
+        multi_subdomain = if options[:domain]
+                            "_gaq.push(['_setDomainName', '#{options[:domain]}']);"
+                          end
+
         html = <<-EOF
 <script type="text/javascript">
   var _gaq = _gaq || [];
     _gaq.push(['_setAccount', '#{code}']);
-    _gaq.push(['_trackPageview']);
-
+    #{multi_subdomain}
+    _gaq.push(['_tracktextPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-  </script>
+</script>
 EOF
         html.html_safe
       end
