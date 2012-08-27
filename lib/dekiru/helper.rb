@@ -50,7 +50,7 @@ EOF
   var _gaq = _gaq || [];
     _gaq.push(['_setAccount', '#{code}']);
     #{multi_subdomain}
-    _gaq.push(['_tracktextPageview']);
+    _gaq.push(['_trackPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
