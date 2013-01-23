@@ -1,3 +1,5 @@
+require "http_accept_language"
+
 module Dekiru
   module ControllerAdditions
     def set_locale
