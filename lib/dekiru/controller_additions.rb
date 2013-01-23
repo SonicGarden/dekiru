@@ -15,5 +15,11 @@ module Dekiru
       logger.debug "[debug] #{http_accept_language.user_preferred_languages}"
       http_accept_language.compatible_language_from(I18n.available_locales)
     end
+
+    # HttpAcceptLanguage::EasyAccess is include to ApplicationController
+    # so, no method error occured
+    def http_accept_language
+      env.http_accept_language
+    end
   end
 end
