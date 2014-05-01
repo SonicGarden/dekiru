@@ -18,9 +18,9 @@ module Dekiru
       end
     end
 
-    def facebook_like(url = url_for(only_path: false), app_id = nil)
+    def facebook_like(url = url_for(only_path: false), app_id = nil, width = 140)
       facebook_app_id = app_id || ENV["FACEBOOK_APP_ID"]
-      html = %Q(<iframe src="//www.facebook.com/plugins/like.php?href=#{u(url)}&amp;send=false&amp;layout=button_count&amp;width=140&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=#{facebook_app_id}" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:140px; height:21px;" allowTransparency="true"></iframe>)
+      html = %Q(<iframe src="//www.facebook.com/plugins/like.php?href=#{u(url)}&amp;send=false&amp;layout=button_count&amp;width=140&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=#{facebook_app_id}" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:#{width}px; height:21px;" allowTransparency="true"></iframe>)
       html.html_safe
     end
 
