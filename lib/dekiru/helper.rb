@@ -1,15 +1,16 @@
 module Dekiru
   module Helper
-    def menu_link_to(*args, &block)
-      url_obj = block_given? ? args[0] : args[1]
+    def menu_link_to(name = nil, options = nil, html_options = nil, &block)
+      args = [name, options, html_options]
+      html_options, options, name = options, name, block if block_given?
 
-      classes = []
-      classes << "active" if current_page?(url_obj)
+      classes = html_options.delete(:li_class).try(:split, ' ') || []
+      classes << "active" if current_page?(options)
 
-      obj = [url_obj].flatten.last
+      obj = [options].flatten.last
       if obj.is_a?(ActiveRecord::Base)
         content_tag_for(:li, obj, :class => classes.join(' ')) do
-          link_to *args, &block
+          link_to name, options, html_options, &block
         end
       else
         content_tag(:li, :class => classes.join(' ')) do
