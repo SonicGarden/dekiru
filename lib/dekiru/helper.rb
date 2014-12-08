@@ -4,7 +4,7 @@ module Dekiru
       args = [name, options, html_options]
       html_options, options, name = options, name, block if block_given?
 
-      classes = html_options.delete(:li_class).try(:split, ' ') || []
+      classes = html_options.try(:delete, :li_class).try(:split, ' ') || []
       classes << "active" if current_page?(options)
 
       obj = [options].flatten.last

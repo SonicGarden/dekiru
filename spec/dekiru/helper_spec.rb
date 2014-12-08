@@ -14,6 +14,11 @@ describe Dekiru::Helper do
     before do
       helper.stub(:current_page?).and_return(true)
     end
+    context "一番シンプルな呼び出し" do
+      it "動くこと" do
+        expect(helper.menu_link_to("テキスト", "/some_path")).to eq("<li class=\"active\"><a href=\"/some_path\">テキスト</a></li>")
+      end
+    end
     context "blockなし" do
       it "動くこと" do
         expect(helper.menu_link_to("テキスト", "/some_path", class: "some_class")).to eq("<li class=\"active\"><a class=\"some_class\" href=\"/some_path\">テキスト</a></li>")
