@@ -19,8 +19,8 @@ module Dekiru
       end
     end
 
-    def null_check_localization(time)
-      localize(time) if time.present?
+    def null_check_localization(*args)
+      localize(*args) if args.try(:first).present?
     end
     alias nl null_check_localization
 
