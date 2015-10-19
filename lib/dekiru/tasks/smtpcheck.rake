@@ -17,4 +17,5 @@ task sendmail_smtpcheck: :environment do
   end
 
   SmtpCheckMailer::checkmail
+  Rails.logger.info "[INFO] End smtpcheck:sendmail_smtpcheck env:#{Rails.env}"
 end
