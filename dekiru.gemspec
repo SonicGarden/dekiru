@@ -17,7 +17,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'http_accept_language', [">= 2.0.0"]
   gem.add_dependency 'rails'
-  gem.add_dependency 'haml-rails'
   gem.add_development_dependency 'rake', [">= 0"]
   gem.add_development_dependency 'rspec'
 end
