@@ -1,4 +1,6 @@
-# Dekiru
+# できる！Rails
+
+[![Build Status](https://travis-ci.org/mataki/dekiru.svg?branch=master)](https://travis-ci.org/mataki/dekiru)
 
 Usefull Helper methods for Ruby on Rails
 
