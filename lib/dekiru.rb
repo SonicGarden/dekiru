@@ -7,6 +7,7 @@ module Dekiru
   class Railtie < ::Rails::Railtie
     rake_tasks do
       load "dekiru/tasks/smtp_check.rake"
+      load "dekiru/tasks/delayed_job_queue_check.rake"
     end
   end
 end
