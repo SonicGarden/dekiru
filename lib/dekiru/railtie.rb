@@ -9,5 +9,10 @@ module Dekiru
         ::ActionController::Base.send :include, Dekiru::ControllerAdditions
       end
     end
+
+    rake_tasks do
+      load "dekiru/tasks/smtp_check.rake"
+      load "dekiru/tasks/delayed_job_queue_check.rake"
+    end
   end
 end

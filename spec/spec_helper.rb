@@ -2,6 +2,7 @@ require 'rubygems'
 require 'rspec'
 
 # For rails app
+require 'rails'
 require "active_support"
 require 'active_support/core_ext/object'
 require "active_record"
