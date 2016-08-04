@@ -20,21 +20,19 @@ Or install it yourself as:
 
 ## Usage
 
-ジョブ監視の管理画面にサインアップして、 APIキーを取得。
+以下のコマンドを実行すると、監視のための設定ファイルが自動的に生成される。
 
 ```
-https://job-mon.herokuapp.com
+bin/rails g dekiru
 ```
 
-取得したAPIキーおよび通知先の email を設定。
+メールアドレス、例外時の処理などは必要に応じて変更する。
 
 ```
 Dekiru.configure do |config|
-  config.monitor_email = "email@example.com"
+  config.monitor_email   = "email@example.com"
   config.monitor_api_key = "xxxxx-xxxx-xxxx-xxxx-xxxxxxxxx"
-  config.error_handle = -> (e) {
-    puts e
-  }
+  config.error_handle    = -> (e) { Bugsnag.notify(e) }
 end
 ```
 
