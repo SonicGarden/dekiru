@@ -19,4 +19,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rails'
   gem.add_development_dependency 'rake', [">= 0"]
   gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'webmock', ['>= 1.19.0']
+  gem.add_development_dependency 'faraday'
+  gem.add_development_dependency 'faraday_middleware'
 end
