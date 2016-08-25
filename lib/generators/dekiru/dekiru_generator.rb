@@ -1,5 +1,7 @@
 require 'rails/generators'
 require 'faraday'
+require 'dekiru/job_mon_client'
+
 class DekiruGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates', __FILE__)
 
@@ -16,23 +18,18 @@ end
     end
   end
 
+  def client
+    @client ||= Dekiru::JobMonClient.new
+  end
+
   private
 
   def fetch_api_key
-    res = api_conn.post '/api/apps.json', { app: { name: fetch_app_name } }
+    res = client.conn.post '/api/apps.json', { app: { name: fetch_app_name } }
     res.body['api_key']
   end
 
   def fetch_app_name
     File.basename(Rails.root)
-  end
-
-  def api_conn
-    @conn ||= Faraday.new(url: 'https://job-mon.herokuapp.com') do |faraday|
-      faraday.request  :url_encoded
-      faraday.request  :json
-      faraday.response :json
-      faraday.adapter  Faraday.default_adapter
-    end
   end
 end
