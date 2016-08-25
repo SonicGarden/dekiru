@@ -2,6 +2,13 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
+  - 2.3
 
+gemfile:
+  - gemfiles/rails_4_1.gemfile
+  - gemfiles/rails_4_2.gemfile
+  - gemfiles/rails_5_0.gemfile
+
+script: "bundle exec rake spec"
 sudo: false
 cache: bundler

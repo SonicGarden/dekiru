@@ -14,7 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "dekiru"
   gem.require_paths = ["lib"]
   gem.version       = Dekiru::VERSION
-
   gem.add_dependency 'http_accept_language', [">= 2.0.0"]
   gem.add_dependency 'rails'
   gem.add_dependency 'faraday'
@@ -23,4 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'webmock', ['>= 1.19.0']
+  gem.add_development_dependency 'appraisal'
 end
