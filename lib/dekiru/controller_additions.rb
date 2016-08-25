@@ -1,4 +1,4 @@
-require "http_accept_language"
+require 'http_accept_language'
 
 module Dekiru
   module ControllerAdditions

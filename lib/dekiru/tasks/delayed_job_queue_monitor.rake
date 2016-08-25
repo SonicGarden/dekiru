@@ -11,4 +11,3 @@ namespace :dekiru do
     Rails.logger.info "[INFO] End dekiru:delayed_job_queue_monitor env:#{Rails.env}"
   end
 end
-

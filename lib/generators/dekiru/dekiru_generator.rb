@@ -1,5 +1,4 @@
 require 'rails/generators'
-require 'faraday'
 require 'dekiru/job_mon_client'
 
 class DekiruGenerator < Rails::Generators::Base
@@ -25,7 +24,7 @@ end
   private
 
   def fetch_api_key
-    res = client.conn.post '/api/apps.json', { app: { name: fetch_app_name } }
+    res = client.conn.post '/api/apps.json', app: { name: fetch_app_name }
     res.body['api_key']
   end
 

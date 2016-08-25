@@ -21,5 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'faraday_middleware'
   gem.add_development_dependency 'rake', [">= 0"]
   gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'webmock', ['>= 1.19.0']
 end

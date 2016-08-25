@@ -1,8 +1,12 @@
+require 'faraday'
+require 'faraday_middleware'
+
 module Dekiru
   class JobMonClient
     def host
       'https://job-mon.herokuapp.com'
     end
+
     def conn
       @conn ||= Faraday.new(:url => host) do |faraday|
         faraday.request  :url_encoded
@@ -25,7 +29,7 @@ module Dekiru
         }
       }
       response = conn.post "/api/apps/#{api_key}/jobs.json", body
-      response.body["id"]
+      response.body['id']
     rescue => e
       Dekiru.configure.error_handle.call(e)
       nil
@@ -33,7 +37,7 @@ module Dekiru
 
     def job_end(job_id)
       if job_id
-        response = conn.put "/api/apps/#{api_key}/jobs/#{job_id}/finished.json", nil
+        conn.put "/api/apps/#{api_key}/jobs/#{job_id}/finished.json"
       end
     end
 
@@ -44,11 +48,10 @@ module Dekiru
         }
       }
       response = conn.post "/api/apps/#{api_key}/queue_logs.json", body
-      response.body["id"]
+      response.body['id']
     rescue => e
       Dekiru.configure.error_handle.call(e)
       nil
     end
   end
 end
-

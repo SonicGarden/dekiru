@@ -10,7 +10,7 @@ module Dekiru
       Rails.logger.error "ENV['SMTP_CHECKER_TO_ADDR'] undefined!" if smtp_checker_to_addr.blank?
 
       Rails.logger.info "checkmail send start #{smtp_checker_to_addr} key:#{app_key}"
-      subject = "[SMTP Checker] SMTP Check Mail"
+      subject = '[SMTP Checker] SMTP Check Mail'
       mail to: smtp_checker_to_addr, subject: subject do |format|
         format.text { render text: app_key }
       end
