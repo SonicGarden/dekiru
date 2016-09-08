@@ -44,7 +44,8 @@ module Dekiru
     def send_queue_log(count)
       body = {
         queue_log: {
-          count: count
+          count: count,
+          rails_env: Rails.env,
         }
       }
       response = conn.post "/api/apps/#{api_key}/queue_logs.json", body
