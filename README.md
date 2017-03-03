@@ -50,6 +50,33 @@ task_with_monitor job: :environment, estimate_time: 10 do
 end
 ```
 
+## Capybara Helpers
+
+以下の設定をすると Capybara 用のヘルパーメソッドが使えるようになる。
+
+```ruby
+require 'dekiru/capybara/helpers'
+RSpec.configure do |config|
+  config.include Dekiru::Capybara::Helpers, type: :feature
+end
+```
+
+### examples
+
+```ruby
+# Ajax処理の終了待ち
+click_link 'Ajax link!'
+wait_for_ajax
+expect(page).to have_content 'created element!'
+
+# Bootstrap3 のモーダルの出現終了待ち(待たないとモーダル内のノードのクリックに失敗することがある)
+wait_for_bs_modal do
+  click_link 'Open bootstrap3 modal'
+end
+click_on 'Button in modal'
+```
+
+
 
 ## Contributing
 
