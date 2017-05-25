@@ -12,8 +12,6 @@ module Dekiru
 
     rake_tasks do
       load 'dekiru/tasks/smtp_check.rake'
-      load 'dekiru/tasks/delayed_job_queue_check.rake'
-      load 'dekiru/tasks/delayed_job_queue_monitor.rake'
     end
   end
 end

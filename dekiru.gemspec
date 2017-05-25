@@ -17,8 +17,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'http_accept_language', [">= 2.0.0"]
   gem.add_dependency 'rails'
-  gem.add_dependency 'faraday'
-  gem.add_dependency 'faraday_middleware'
   gem.add_development_dependency 'rake', [">= 0"]
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rubocop'
