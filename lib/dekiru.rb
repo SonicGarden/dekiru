@@ -8,5 +8,3 @@ require 'active_support/all'
 
 module Dekiru
 end
-
-require_relative 'dekiru/configure'
