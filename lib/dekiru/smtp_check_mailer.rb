@@ -12,7 +12,7 @@ module Dekiru
       Rails.logger.info "checkmail send start #{smtp_checker_to_addr} key:#{app_key}"
       subject = '[SMTP Checker] SMTP Check Mail'
       mail to: smtp_checker_to_addr, subject: subject do |format|
-        format.text { render text: app_key }
+        format.text { render plain: app_key }
       end
       Rails.logger.info "send to #{smtp_checker_to_addr} key:#{app_key}"
     end
