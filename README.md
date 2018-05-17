@@ -48,6 +48,31 @@ end
 click_on 'Button in modal'
 ```
 
+## Rake Task
+
+以下の設定をすると Rake タスクの実行前後にログ出力されるようになる。(Ruby2.4 以降が必要)
+
+In Rakefile:
+
+```ruby
+require_relative 'config/application'
+require 'dekiru/task_with_logger'
+
+Rails.application.load_tasks
+```
+
+In myapp.rake:
+
+```ruby
+using TaskWithLogger
+
+namespace :myapp do
+  desc 'dekiru'
+  task dekiru: :environment do
+    puts 'dekiru'
+  end
+end
+```
 
 ## Contributing
 
