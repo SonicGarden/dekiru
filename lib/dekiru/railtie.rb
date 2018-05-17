@@ -12,6 +12,7 @@ module Dekiru
 
     rake_tasks do
       load 'dekiru/tasks/smtp_check.rake'
+      load 'dekiru/tasks/db.rake'
     end
   end
 end

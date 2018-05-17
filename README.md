@@ -74,6 +74,17 @@ namespace :myapp do
 end
 ```
 
+以下の設定をすると db:migrate タスクの実行前に競合がチェックされる。
+
+In Rakefile:
+
+```ruby
+require_relative 'config/application'
+
+Rails.application.load_tasks
+Rake::Task['db:migrate'].enhance(['db:migrate:check_confrict']) if Rails.env.development?
+```
+
 ## Contributing
 
 1. Fork it
