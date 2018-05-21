@@ -12,7 +12,7 @@ describe Dekiru::Helper do
   end
   describe "#menu_link_to" do
     before do
-      helper.stub(:current_page?).and_return(true)
+      allow(helper).to receive(:current_page?).and_return(true)
     end
     context "一番シンプルな呼び出し" do
       it "動くこと" do
@@ -34,7 +34,7 @@ describe Dekiru::Helper do
     end
     context "今のページじゃない" do
       before do
-        helper.stub(:current_page?).and_return(false)
+        allow(helper).to receive(:current_page?).and_return(false)
       end
       it "動くこと" do
         expect(helper.menu_link_to("テキスト", "/some_path", class: "some_class")).to eq("<li class=\"\"><a class=\"some_class\" href=\"/some_path\">テキスト</a></li>")
