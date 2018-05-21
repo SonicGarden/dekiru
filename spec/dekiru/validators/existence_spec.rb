@@ -23,40 +23,29 @@ describe ActiveModel::Validations::ExistenceValidator do
   end
 
   describe 'validate' do
-    subject do
+    subject(:valid?) do
       model_class.new(user_id, user_class).valid?
     end
 
     context 'with exists id' do
       let(:user_id) { 'valid_id' }
+      let(:options) { { in: -> { users } } }
 
-      context 'with class option' do
-        let(:options) { { in: user_class } }
-
-        it { is_expected.to eq true }
-      end
-
-      context 'with proc option' do
-        let(:options) { { in: -> { users } } }
-
-        it { is_expected.to eq true }
-      end
+      it { is_expected.to eq true }
     end
 
     context 'with exists not id' do
       let(:user_id) { 'invalid_id' }
+      let(:options) { { in: -> { users } } }
 
-      context 'with class option' do
-        let(:options) { { in: user_class } }
+      it { is_expected.to eq false }
+    end
 
-        it { is_expected.to eq false }
-      end
+    context 'with invalid option' do
+      let(:user_id) { 'valid_id' }
+      let(:options) { { in: user_class } }
 
-      context 'with proc option' do
-        let(:options) { { in: -> { users } } }
-
-        it { is_expected.to eq false }
-      end
+      it { expect { valid? }.to raise_error(ArgumentError) }
     end
   end
 end

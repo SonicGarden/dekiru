@@ -14,12 +14,10 @@ module ActiveModel
       end
 
       def exists?(record, value)
-        collection =
-          if options[:in].respond_to?(:call)
-            record.instance_exec(&options[:in])
-          else
-            options[:in]
-          end
+        unless options[:in].respond_to?(:call)
+          raise ArgumentError, '`in` option should be proc'
+        end
+        collection = record.instance_exec(&options[:in])
         collection.exists?(value)
       end
     end
