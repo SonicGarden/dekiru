@@ -82,7 +82,7 @@ In Rakefile:
 require_relative 'config/application'
 
 Rails.application.load_tasks
-Rake::Task['db:migrate'].enhance(['db:migrate:check_confrict']) if Rails.env.development?
+Rake::Task['db:migrate'].enhance(['db:migrate:check_conflict']) if Rails.env.development?
 ```
 
 ## Contributing
