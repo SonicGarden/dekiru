@@ -1,7 +1,7 @@
 module Dekiru
   module Capybara
     module Matchers
-      class JsErrorMatcher
+      class JsNoErrorMatcher
         def matches?(page)
           errors = page.driver.browser.manage.logs.get(:browser)
           errors.find_all { |error| error.level == 'WARNING' }.each do |error|
@@ -23,7 +23,7 @@ module Dekiru
       end
 
       def have_no_js_errors
-        JsErrorMatcher.new
+        JsNoErrorMatcher.new
       end
     end
   end
