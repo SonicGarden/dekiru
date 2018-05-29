@@ -3,11 +3,10 @@ module TaskWithLogger
     private
 
       def task(*args, &block)
-        scope_path = Rake.application.current_scope.path
-        new_block = proc do
-          __echo__ "[START] #{scope_path}: #{args.inspect} (#{Time.current})"
-          yield
-          __echo__ "[END] #{scope_path}: #{args.inspect} (#{Time.current})"
+        new_block = proc do |_task, _args|
+          __echo__ "[START] #{_task.name} #{_args.to_h} (#{Time.current})"
+          yield(_task, _args)
+          __echo__ "[END] #{_task.name} #{_args.to_h} (#{Time.current})"
         end
         super(*args, &new_block)
       end

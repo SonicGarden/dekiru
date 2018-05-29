@@ -48,6 +48,30 @@ end
 click_on 'Button in modal'
 ```
 
+## Capybara Matchers
+
+以下の設定をすると Capybara 用のマッチャーが使えるようになる。
+
+```ruby
+require 'dekiru/capybara/matchers'
+RSpec.configure do |config|
+  config.include Dekiru::Capybara::Matchers, type: :feature
+end
+```
+
+### examples
+
+```ruby
+# javascriptエラーがあったらテスト失敗するように
+RSpec.configure do |config|
+  config.after(:each, type: :feature) do |example|
+    if example.metadata[:js] == true
+      expect(page).to have_no_js_errors
+    end
+  end
+end
+```
+
 ## Rake Task
 
 以下の設定をすると Rake タスクの実行前後にログ出力されるようになる。(Ruby2.4 以降が必要)
@@ -87,8 +111,8 @@ Rake::Task['db:migrate'].enhance(['db:migrate:check_conflict']) if Rails.env.dev
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1.  Fork it
+2.  Create your feature branch (`git checkout -b my-new-feature`)
+3.  Commit your changes (`git commit -am 'Added some feature'`)
+4.  Push to the branch (`git push origin my-new-feature`)
+5.  Create new Pull Request
