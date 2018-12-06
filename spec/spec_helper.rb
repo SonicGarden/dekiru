@@ -19,5 +19,3 @@ Dir.glob(File.join(PROJECT_ROOT, 'spec/supports/**/*.rb')).each { |f| require f 
 
 RSpec.configure do |config|
 end
-
-# ActionMailerのテストを
