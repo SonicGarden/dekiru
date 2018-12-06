@@ -10,6 +10,14 @@ module Dekiru
       end
     end
 
+    config.after_initialize do
+      if Dekiru.configuration.mail_security_hook
+        Rails.logger.info '[dekiru] mail_security_hook enabled'
+        interceptor = Dekiru::MailSecurityInterceptor.new
+        ActionMailer::Base.register_interceptor(interceptor)
+      end
+    end
+
     rake_tasks do
       load 'dekiru/tasks/smtp_check.rake'
       load 'dekiru/tasks/db.rake'
