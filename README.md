@@ -122,6 +122,38 @@ Dekiru.configure do |config|
 end
 ```
 
+## Data Migration Operator
+
+実行しながら進捗を表示したり、処理の最後に実行の確認をしたりといった、データ移行作業をするときに必要な処理を以下のような script を作成することで、実現できるようになります。
+
+```ruby
+# scripts/demo.rb
+Dekiru::DataMigrationOperator.execute('Demo migration') do
+  targets = User.where("email LIKE '%sonicgarden%'")
+
+  log "all targets count: #{targets.count}"
+  find_each_with_progress(targets) do |user|
+    user.update(admin: true)
+  end
+
+  log "updated user count: #{User.where("email LIKE '%sonicgarden%'").where(admin: true).count}"
+end
+```
+
+```
+$ bin/rails r scripts/demo.rb
+Start: Demo migration at 2019-05-24 18:29:57 +0900
+
+all targets count: 30
+Time: 00:00:00 |=================>>| 100% Progress
+updated user count: 30
+
+Are you sure to commit? (yes/no) > yes
+
+Finished successfully: Demo migration
+Total time: 6.35 sec
+```
+
 ## Contributing
 
 1.  Fork it
