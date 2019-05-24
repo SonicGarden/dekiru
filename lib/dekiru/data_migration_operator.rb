@@ -41,14 +41,15 @@ module Dekiru
       ((self.ended_at || Time.current) - self.started_at)
     end
 
-    def find_each_with_progress(target_scope, title: nil)
-      pb = ::ProgressBar.create(
-        title: title,
-        total: target_scope.count,
+    def find_each_with_progress(target_scope, options = {})
+      opt = {
         format: '%a |%b>>%i| %p%% %t',
         length: 50,
+      }.merge(options).merge(
+        total: target_scope.count,
         output: stream
       )
+      pb = ::ProgressBar.create(opt)
       target_scope.find_each do |target|
         yield target
         pb.increment
