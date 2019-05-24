@@ -44,7 +44,6 @@ module Dekiru
     def find_each_with_progress(target_scope, options = {})
       opt = {
         format: '%a |%b>>%i| %p%% %t',
-        length: 50,
       }.merge(options).merge(
         total: target_scope.count,
         output: stream
