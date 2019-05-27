@@ -20,7 +20,7 @@ module Dekiru
     def execute(&block)
       @started_at = Time.current
       log "Start: #{title} at #{started_at}\n\n"
-      @result = ActiveRecord::Base.transaction do
+      @result = ActiveRecord::Base.transaction(requires_new: true) do
         instance_eval(&block)
         confirm?("\nAre you sure to commit?")
       end
