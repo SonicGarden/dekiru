@@ -1,5 +1,5 @@
 class ActiveRecord::Base
-  def self.transaction
-    yield
+  def self.transaction(*args)
+    yield(*args)
   end
 end
