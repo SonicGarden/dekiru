@@ -113,7 +113,7 @@ Rake::Task['db:migrate'].enhance(['db:migrate:check_conflict']) if Rails.env.dev
 
 以下の設定をすると、宛先を指定しないメールを配信しようとした時に`Dekiru::MailSecurityInterceptor::NoToAdreessError`例外を発生させる。
 
-※ toに空文字や空配列を指定してメールを配信しようとすると、bcc内のアドレスがtoに転記されるといった問題がある。これを未然に防ぐことができる。
+※ to に空文字や空配列を指定してメールを配信しようとすると、bcc 内のアドレスが to に転記されるといった問題がある。これを未然に防ぐことができる。
 
 ```ruby
 # config/initializer/dekiru.rb
@@ -152,6 +152,20 @@ Are you sure to commit? (yes/no) > yes
 
 Finished successfully: Demo migration
 Total time: 6.35 sec
+```
+
+## Refinements
+
+### Dekiru::CamelizeHash
+
+```ruby
+using Dekiru::CamelizeHash
+
+{ dekiru_rails: true }.camelize_keys(:lower)
+# => { dekiruRails: true }
+
+{ dekiru_rails: { dekiru_rails: true } }.deep_camelize_keys(:lower)
+# => { dekiruRails: { dekiruRails: true } }
 ```
 
 ## Contributing
