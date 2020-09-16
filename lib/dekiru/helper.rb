@@ -19,8 +19,8 @@ module Dekiru
       end
     end
 
-    def null_check_localization(*args)
-      localize(*args) if args.try(:first).present?
+    def null_check_localization(object, **options)
+      localize(object, **options) if object.present?
     end
     alias nl null_check_localization
 
