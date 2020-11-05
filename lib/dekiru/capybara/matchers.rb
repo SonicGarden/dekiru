@@ -2,14 +2,14 @@ module Dekiru
   module Capybara
     module Matchers
       class JsNoErrorMatcher
-        def matches?(page)
-          errors = page.driver.browser.manage.logs.get(:browser)
-          errors.find_all { |error| error.level == 'WARNING' }.each do |error|
+        def matches?(page_or_logs)
+          logs = page_or_logs.respond_to?(:driver) ? page.driver.browser.manage.logs.get(:browser) : page_or_logs
+          logs.find_all { |log| log.level == 'WARNING' }.each do |log|
             STDERR.puts 'WARN: javascript warning'
-            STDERR.puts error.message
+            STDERR.puts log.message
           end
 
-          @severe_errors = errors.find_all { |error| error.level == 'SEVERE' }
+          @severe_errors = logs.find_all { |log| log.level == 'SEVERE' }
           @severe_errors.empty?
         end
 
