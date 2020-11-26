@@ -97,7 +97,7 @@ module Dekiru
       increment_side_effects(:deliverd_mailers, event.payload[:mailer]) if event.payload[:mailer]
 
       if event.payload[:sql] && /\A\s*(insert|update|delete)/i.match?(event.payload[:sql])
-        increment_side_effects(:danger_queries, event.payload[:sql])
+        increment_side_effects(:write_queries, event.payload[:sql])
       end
     end
 
