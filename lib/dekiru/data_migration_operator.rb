@@ -10,8 +10,13 @@ module Dekiru
 
     def initialize(title, options = {})
       @title = title
-      @stream = options[:output] || $stdout
-      @side_effects = Hash.new { |hash, key| hash[key] = [] }
+      @options = options
+      @stream = @options[:output] || $stdout
+      @side_effects = Hash.new do |hash, key|
+        hash[key] = Hash.new do |_hash, _key|
+          _hash[_key] = 0
+        end
+      end
     end
 
     def execute(&block)
@@ -21,7 +26,7 @@ module Dekiru
         ActiveSupport::Notifications.subscribed(method(:handle_notification), /^(sql|enqueue|deliver)/) do
           instance_eval(&block)
         end
-        print_side_effects
+        warning_side_effects if @options[:warning_side_effects]
         confirm?("\nAre you sure to commit?")
       end
       log "Finished successfully: #{title}" if @result == true
@@ -88,24 +93,26 @@ module Dekiru
     def handle_notification(*args)
       event = ActiveSupport::Notifications::Event.new(*args)
 
-      @side_effects[:enqueued_jobs] << event.payload[:job].class.name if event.payload[:job]
-      @side_effects[:deliverd_mailers] << event.payload[:mailer] if event.payload[:mailer]
+      increment_side_effects(:enqueued_jobs, event.payload[:job].class.name)  if event.payload[:job]
+      increment_side_effects(:deliverd_mailers, event.payload[:mailer]) if event.payload[:mailer]
 
       if event.payload[:sql] && /\A\s*(insert|update|delete)/i.match?(event.payload[:sql])
-        @side_effects[:danger_queries] << event.payload[:sql]
+        increment_side_effects(:danger_queries, event.payload[:sql])
       end
     end
 
-    def print_side_effects
+    def increment_side_effects(type, value)
+      @side_effects[type][value] += 1
+    end
+
+    def warning_side_effects
       @side_effects.each do |name, items|
         newline
         log "#{name.to_s.titlecase}!!"
-        log count_by_items(items).inspect
+        items.sort_by { |v, c| c }.reverse.slice(0, 20).each do |value, count|
+          log "#{count} call: #{value}"
+        end
       end
-    end
-
-    def count_by_items(items)
-      items.group_by(&:itself).map {|k, v| [v.size, k] }.sort_by { |count, _q| count }
     end
   end
 end
