@@ -10,18 +10,22 @@ module Dekiru
 
     def initialize(title, options = {})
       @title = title
-      @stream = options[:output] || $stdout
-    end
-
-    def log(message)
-      stream.puts(message)
+      @options = options
+      @stream = @options[:output] || $stdout
+      @side_effects = Hash.new do |hash, key|
+        hash[key] = Hash.new(0)
+      end
     end
 
     def execute(&block)
       @started_at = Time.current
       log "Start: #{title} at #{started_at}\n\n"
       @result = ActiveRecord::Base.transaction(requires_new: true, joinable: false) do
-        instance_eval(&block)
+        if @options[:warning_side_effects]
+          warning_side_effects(&block)
+        else
+          instance_eval(&block)
+        end
         confirm?("\nAre you sure to commit?")
       end
       log "Finished successfully: #{title}" if @result == true
@@ -56,6 +60,12 @@ module Dekiru
       pb.finish
     end
 
+    private
+
+    def log(message)
+      stream.puts(message)
+    end
+
     def confirm?(message = 'Are you sure?')
       loop do
         stream.print "#{message} (yes/no) > "
@@ -77,6 +87,35 @@ module Dekiru
     def cancel!
       log "Canceled: #{title}"
       raise ActiveRecord::Rollback
+    end
+
+    def handle_notification(*args)
+      event = ActiveSupport::Notifications::Event.new(*args)
+
+      increment_side_effects(:enqueued_jobs, event.payload[:job].class.name)  if event.payload[:job]
+      increment_side_effects(:deliverd_mailers, event.payload[:mailer]) if event.payload[:mailer]
+
+      if event.payload[:sql] && /\A\s*(insert|update|delete)/i.match?(event.payload[:sql])
+        increment_side_effects(:write_queries, event.payload[:sql])
+      end
+    end
+
+    def increment_side_effects(type, value)
+      @side_effects[type][value] += 1
+    end
+
+    def warning_side_effects(&block)
+      ActiveSupport::Notifications.subscribed(method(:handle_notification), /^(sql|enqueue|deliver)/) do
+        instance_eval(&block)
+      end
+
+      @side_effects.each do |name, items|
+        newline
+        log "#{name.to_s.titlecase}!!"
+        items.sort_by { |v, c| c }.reverse.slice(0, 20).each do |value, count|
+          log "#{count} call: #{value}"
+        end
+      end
     end
   end
 end
