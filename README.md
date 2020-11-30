@@ -154,6 +154,34 @@ Finished successfully: Demo migration
 Total time: 6.35 sec
 ```
 
+また`warning_side_effects: true`オプションを付けて実行することで、データ移行作業で発生した副作用が表示されるようになります。
+
+```ruby
+Dekiru::DataMigrationOperator.execute('Demo migration', warning_side_effects: true) do
+  # ...
+end
+```
+
+```
+$ bin/rails r scripts/demo.rb
+Start: Demo migration at 2019-05-24 18:29:57 +0900
+
+all targets count: 30
+Time: 00:00:00 |=================>>| 100% Progress
+updated user count: 30
+
+Write Queries!!
+30 call: Update "users" SET ...
+
+Enqueued Jobs!!
+10 call: NotifyJob
+
+Deliverd Mailers!!
+10 call: UserMailer
+
+Are you sure to commit? (yes/no) > yes
+```
+
 ## Refinements
 
 ### Dekiru::CamelizeHash

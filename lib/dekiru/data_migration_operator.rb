@@ -13,9 +13,7 @@ module Dekiru
       @options = options
       @stream = @options[:output] || $stdout
       @side_effects = Hash.new do |hash, key|
-        hash[key] = Hash.new do |_hash, _key|
-          _hash[_key] = 0
-        end
+        hash[key] = Hash.new(0)
       end
     end
 
@@ -23,10 +21,11 @@ module Dekiru
       @started_at = Time.current
       log "Start: #{title} at #{started_at}\n\n"
       @result = ActiveRecord::Base.transaction(requires_new: true, joinable: false) do
-        ActiveSupport::Notifications.subscribed(method(:handle_notification), /^(sql|enqueue|deliver)/) do
+        if @options[:warning_side_effects]
+          warning_side_effects(&block)
+        else
           instance_eval(&block)
         end
-        warning_side_effects if @options[:warning_side_effects]
         confirm?("\nAre you sure to commit?")
       end
       log "Finished successfully: #{title}" if @result == true
@@ -105,7 +104,11 @@ module Dekiru
       @side_effects[type][value] += 1
     end
 
-    def warning_side_effects
+    def warning_side_effects(&block)
+      ActiveSupport::Notifications.subscribed(method(:handle_notification), /^(sql|enqueue|deliver)/) do
+        instance_eval(&block)
+      end
+
       @side_effects.each do |name, items|
         newline
         log "#{name.to_s.titlecase}!!"
