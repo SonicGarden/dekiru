@@ -9,7 +9,7 @@ module ActiveModel
     class ExistenceValidator < EachValidator
       def validate_each(record, attribute, value)
         unless exists?(record, value)
-          record.errors.add(attribute, :existence, options.except(:in).merge!(value: value))
+          record.errors.add(attribute, :existence, **options.except(:in).merge!(value: value))
         end
       end
 
