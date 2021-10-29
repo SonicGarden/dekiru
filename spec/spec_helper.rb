@@ -9,6 +9,7 @@ require "active_record"
 require "action_view"
 require "action_view/helpers"
 require 'action_mailer'
+require 'byebug'
 
 PROJECT_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 

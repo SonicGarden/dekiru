@@ -12,6 +12,7 @@ module Dekiru
       @title = title
       @options = options
       @stream = @options[:output] || $stdout
+      @without_transaction = @options[:without_transaction] || false
       @side_effects = Hash.new do |hash, key|
         hash[key] = Hash.new(0)
       end
@@ -20,13 +21,14 @@ module Dekiru
     def execute(&block)
       @started_at = Time.current
       log "Start: #{title} at #{started_at}\n\n"
-      @result = ActiveRecord::Base.transaction(requires_new: true, joinable: false) do
-        if @options[:warning_side_effects]
-          warning_side_effects(&block)
-        else
-          instance_eval(&block)
+      if @without_transaction
+        run(&block)
+        @result = true
+      else
+        @result = ActiveRecord::Base.transaction(requires_new: true, joinable: false) do
+          run(&block)
+          confirm?("\nAre you sure to commit?")
         end
-        confirm?("\nAre you sure to commit?")
       end
       log "Finished successfully: #{title}" if @result == true
     rescue => e
@@ -115,6 +117,14 @@ module Dekiru
         items.sort_by { |v, c| c }.reverse.slice(0, 20).each do |value, count|
           log "#{count} call: #{value}"
         end
+      end
+    end
+
+    def run(&block)
+      if @options[:warning_side_effects]
+        warning_side_effects(&block)
+      else
+        instance_eval(&block)
       end
     end
   end
