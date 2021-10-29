@@ -36,6 +36,23 @@ end
 ### examples
 
 ```ruby
+# アニメーション終了待ちヘルパー(アニメーション中のクリックは失敗することがある)
+
+# CSSセレクタで指定した要素の位置が動かなくなるまで待つ
+wait_for_position_stable(:css, '[data-test-id="confirmation-modal"]')
+click_button 'OK'
+
+# チェックボックスの位置が0.5秒間停止し続けるまで待つ
+# タイムアウトは5秒
+wait_for_position_stable(:checkbox, 'Red', wait: 5, stable_wait: 0.5)
+check 'Red'
+
+# findした要素を指定してアニメーション終了待ち
+element = find('[data-test-id="confirmation-modal"]')
+wait_for_element_position_stable(element)
+```
+
+```ruby
 # Ajax処理の終了待ち
 click_link 'Ajax link!'
 wait_for_ajax
