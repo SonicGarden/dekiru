@@ -52,19 +52,6 @@ element = find('[data-test-id="confirmation-modal"]')
 wait_for_element_position_stable(element)
 ```
 
-```ruby
-# Ajax処理の終了待ち
-click_link 'Ajax link!'
-wait_for_ajax
-expect(page).to have_content 'created element!'
-
-# Bootstrap3 のモーダルの出現終了待ち(待たないとモーダル内のノードのクリックに失敗することがある)
-wait_for_event('shown.bs.modal') do
-  click_link 'Open bootstrap3 modal'
-end
-click_on 'Button in modal'
-```
-
 ## Capybara Matchers
 
 以下の設定をすると Capybara 用のマッチャーが使えるようになる。
