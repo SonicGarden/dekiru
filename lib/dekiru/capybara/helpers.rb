@@ -1,6 +1,10 @@
+require 'dekiru/capybara/helpers/wait_for_position_stable'
+
 module Dekiru
   module Capybara
     module Helpers
+      include WaitForPositionStable
+
       class Error < StandardError; end
 
       def wait_for_event(event)
