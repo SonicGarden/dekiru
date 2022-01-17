@@ -127,5 +127,36 @@ describe Dekiru::DataMigrationOperator do
       expect(operator.stream.out).to include('Finished successfully:')
       expect(operator.stream.out).to include('Total time:')
     end
+
+    it 'total をオプションで渡すことができる' do
+      class Dekiru::DummyRecord
+        def self.count
+          raise "won't call"
+        end
+
+        def self.find_each
+          yield 99
+        end
+      end
+
+      allow(STDIN).to receive(:gets) do
+        "yes\n"
+      end
+
+      sum = 0
+      operator.execute do
+        find_each_with_progress(Dekiru::DummyRecord, title: 'pass total as option', total: 1) do |num|
+          sum += num
+        end
+      end
+
+      expect(sum).to eq(99)
+      expect(operator.result).to eq(true)
+      expect(operator.error).to eq(nil)
+      expect(operator.stream.out).to include('Are you sure to commit?')
+      expect(operator.stream.out).to include('pass total as option:')
+      expect(operator.stream.out).to include('Finished successfully:')
+      expect(operator.stream.out).to include('Total time:')
+    end
   end
 end

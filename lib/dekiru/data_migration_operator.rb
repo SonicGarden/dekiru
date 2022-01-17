@@ -48,10 +48,11 @@ module Dekiru
     end
 
     def find_each_with_progress(target_scope, options = {})
+      total = options.delete(:total)
       opt = {
         format: '%a |%b>>%i| %p%% %t',
       }.merge(options).merge(
-        total: target_scope.count,
+        total: total || target_scope.count,
         output: stream
       )
       pb = ::ProgressBar.create(opt)
