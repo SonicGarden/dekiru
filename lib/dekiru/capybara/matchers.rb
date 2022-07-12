@@ -3,7 +3,12 @@ module Dekiru
     module Matchers
       class JsNoErrorMatcher
         def matches?(page_or_logs)
-          logs = page_or_logs.respond_to?(:driver) ? page_or_logs.driver.browser.logs.get(:browser) : page_or_logs
+          logs = if page_or_logs.respond_to?(:driver)
+                   ActiveSupport::Deprecation.warn('[dekiru] call have_no_js_errors with page is deprecated. please call with logs.')
+                   page_or_logs.driver.browser.logs.get(:browser)
+                 else
+                   page_or_logs
+                 end
           logs.find_all { |log| log.level == 'WARNING' }.each do |log|
             STDERR.puts 'WARN: javascript warning'
             STDERR.puts log.message
