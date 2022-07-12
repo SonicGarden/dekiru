@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Dekiru::VERSION
 
-  gem.required_ruby_version = '>= 2.4.0'
+  gem.required_ruby_version = '>= 2.7.0'
 
   gem.add_dependency 'http_accept_language', [">= 2.0.0"]
   gem.add_dependency 'rails'
