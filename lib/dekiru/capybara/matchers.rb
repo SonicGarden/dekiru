@@ -4,7 +4,6 @@ module Dekiru
       class JsNoErrorMatcher
         def matches?(page_or_logs)
           logs = if page_or_logs.respond_to?(:driver)
-                   ActiveSupport::Deprecation.warn('[dekiru] call have_no_js_errors with page is deprecated. please call with logs.')
                    page_or_logs.driver.browser.logs.get(:browser)
                  else
                    page_or_logs
