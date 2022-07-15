@@ -2,11 +2,7 @@
 
 [![Build Status](https://travis-ci.org/mataki/dekiru.svg?branch=master)](https://travis-ci.org/mataki/dekiru)
 
-Usefull Helper methods for Ruby on Rails
-
-## Rails version support
-
-Rails 5.1 は ~> 0.1.0
+Useful Helper methods for Ruby on Rails
 
 ## Installation
 
