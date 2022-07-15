@@ -12,7 +12,7 @@ module Dekiru
       @title = title
       @options = options
       @stream = @options.fetch(:output, $stdout)
-      @without_transaction = @options.fetch(:without_transaction, true)
+      @without_transaction = @options.fetch(:without_transaction, false)
       @side_effects = Hash.new do |hash, key|
         hash[key] = Hash.new(0)
       end
@@ -122,7 +122,7 @@ module Dekiru
     end
 
     def run(&block)
-      if @options[:warning_side_effects]
+      if @options.fetch(:warning_side_effects, true)
         warning_side_effects(&block)
       else
         instance_eval(&block)
