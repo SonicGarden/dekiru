@@ -17,12 +17,12 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.7.0'
 
-  gem.add_dependency 'http_accept_language', [">= 2.0.0"]
-  gem.add_dependency 'rails'
+  gem.add_dependency 'http_accept_language', '>= 2.0.0'
+  gem.add_dependency 'rails', '>= 6.0'
   gem.add_dependency 'ruby-progressbar'
-  gem.add_development_dependency 'rake', [">= 0"]
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rubocop'
-  gem.add_development_dependency 'webmock', ['>= 1.19.0']
+  gem.add_development_dependency 'webmock', '>= 1.19.0'
   gem.add_development_dependency 'byebug'
 end

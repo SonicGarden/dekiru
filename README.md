@@ -4,10 +4,6 @@
 
 Useful Helper methods for Ruby on Rails
 
-## Rails version support
-
-Rails 5.1 は ~> 0.1.0
-
 ## Installation
 
 Add this line to your application's Gemfile:
