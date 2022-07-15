@@ -11,8 +11,8 @@ module Dekiru
     def initialize(title, options = {})
       @title = title
       @options = options
-      @stream = @options[:output] || $stdout
-      @without_transaction = @options[:without_transaction] || false
+      @stream = @options.fetch(:output, $stdout)
+      @without_transaction = @options.fetch(:without_transaction, true)
       @side_effects = Hash.new do |hash, key|
         hash[key] = Hash.new(0)
       end
