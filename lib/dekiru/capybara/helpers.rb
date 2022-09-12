@@ -1,4 +1,5 @@
 require 'dekiru/capybara/helpers/wait_for_position_stable'
+require 'dekiru/capybara/helpers/take_screenshot'
 
 module Dekiru
   module Capybara
