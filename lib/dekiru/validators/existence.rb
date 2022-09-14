@@ -8,6 +8,8 @@ module ActiveModel
   module Validations
     class ExistenceValidator < EachValidator
       def validate_each(record, attribute, value)
+        ActiveSupport::Deprecation.warn('`ExistenceValidator` is deprecated and will be removed in v0.5. Please use `inclusion: { in: xx }` instead.')
+
         unless exists?(record, value)
           record.errors.add(attribute, :existence, **options.except(:in).merge!(value: value))
         end
