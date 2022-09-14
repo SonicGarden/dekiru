@@ -1,7 +1,6 @@
 require 'dekiru/version'
 require 'dekiru/railtie' if defined?(::Rails)
 require 'dekiru/helper'
-require 'dekiru/controller_additions'
 require 'dekiru/validators/existence'
 require 'dekiru/data_migration_operator'
 require 'dekiru/mail_security_interceptor'
