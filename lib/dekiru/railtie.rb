@@ -4,10 +4,6 @@ module Dekiru
       ActiveSupport.on_load(:action_view) do
         ::ActionView::Base.send :include, Dekiru::Helper
       end
-
-      ActiveSupport.on_load(:action_controller) do
-        ::ActionController::Base.send :include, Dekiru::ControllerAdditions
-      end
     end
 
     config.after_initialize do
@@ -19,7 +15,6 @@ module Dekiru
     end
 
     rake_tasks do
-      load 'dekiru/tasks/smtp_check.rake'
       load 'dekiru/tasks/db.rake'
     end
   end
