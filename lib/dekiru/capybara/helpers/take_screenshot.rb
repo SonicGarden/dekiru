@@ -24,7 +24,9 @@ module Dekiru
 end
 
 RSpec.configure do |config|
-  config.before type: :feature do |example|
-    dekiru_current_example(example)
+  %i[system feature].each do |type|
+    config.before type: type do |example|
+      dekiru_current_example(example)
+    end
   end
 end
