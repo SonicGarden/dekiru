@@ -2,6 +2,8 @@ require 'ruby-progressbar'
 
 module Dekiru
   class DataMigrationOperator
+    class NestedTransactionError < StandardError ; end
+
     attr_reader :title, :stream, :result, :canceled, :started_at, :ended_at, :error
 
     def self.execute(title, options = {}, &block)
@@ -25,7 +27,9 @@ module Dekiru
         run(&block)
         @result = true
       else
-        @result = ActiveRecord::Base.transaction(requires_new: true, joinable: false) do
+        raise NestedTransactionError if current_transaction_open?
+
+        @result = ActiveRecord::Base.transaction do
           run(&block)
           confirm?("\nAre you sure to commit?")
         end
@@ -64,6 +68,10 @@ module Dekiru
     end
 
     private
+
+    def current_transaction_open?
+      ActiveRecord::Base.connection.current_transaction.open?
+    end
 
     def log(message)
       stream.puts(message)
