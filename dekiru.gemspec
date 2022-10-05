@@ -6,7 +6,11 @@ Gem::Specification.new do |gem|
   gem.email         = ["matsumura.aki@gmail.com"]
   gem.description   = %q{Usefull helper methods for Ruby on Rails}
   gem.summary       = %q{Usefull helper methods for Ruby on Rails}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/SonicGarden/dekiru"
+
+  gem.metadata["homepage_uri"] = gem.homepage
+  gem.metadata["source_code_uri"] = "https://github.com/SonicGarden/dekiru"
+  gem.metadata["changelog_uri"] = "https://github.com/SonicGarden/dekiru/releases"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
