@@ -27,7 +27,11 @@ describe Dekiru::DataMigrationOperator do
     Dekiru::DummyStream.new
   end
   let(:without_transaction) { false }
-  let(:operator) { Dekiru::DataMigrationOperator.new('dummy', output: dummy_stream, without_transaction: without_transaction) }
+  let(:operator) do
+    op = Dekiru::DataMigrationOperator.new('dummy', output: dummy_stream, without_transaction: without_transaction)
+    allow(op).to receive(:current_transaction_open?) { false }
+    op
+  end
 
   describe '#execute' do
     it 'confirm で yes' do
@@ -74,6 +78,14 @@ describe Dekiru::DataMigrationOperator do
       expect(operator.stream.out).not_to include('Are you sure to commit?')
       expect(operator.stream.out).not_to include('Canceled:')
       expect(operator.stream.out).to include('Total time:')
+    end
+
+    context 'トランザクション内で呼び出された場合' do
+      before { allow(operator).to receive(:current_transaction_open?) { true } }
+
+      it '例外が発生すること' do
+        expect { operator.execute { log 'processing'; sleep 1.0 } }.to raise_error(Dekiru::DataMigrationOperator::NestedTransactionError)
+      end
     end
 
     context 'without_transaction: true のとき' do
