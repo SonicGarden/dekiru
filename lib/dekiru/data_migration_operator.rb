@@ -13,7 +13,7 @@ module Dekiru
     def initialize(title, options = {})
       @title = title
       @options = options
-      @logger = @options[:logger] || Logger.new(Rails.root.join("log/data_migration_#{title.gsub(/[[:space:]]/, '')}.log"))
+      @logger = @options.fetch(:logger) { Logger.new(Rails.root.join("log/data_migration_#{Time.current.strftime("%Y%m%d%H%M")}.log")) }
       @stream = @options.fetch(:output, $stdout)
       @without_transaction = @options.fetch(:without_transaction, false)
       @side_effects = Hash.new do |hash, key|
@@ -77,7 +77,7 @@ module Dekiru
 
     def log(message)
       stream.puts(message)
-      logger.info(message.squish)
+      logger&.info(message.squish)
     end
 
     def confirm?(message = 'Are you sure?')
