@@ -4,7 +4,7 @@ module Dekiru
   class DataMigrationOperator
     class NestedTransactionError < StandardError ; end
 
-    attr_reader :title, :stream, :result, :canceled, :started_at, :ended_at, :error
+    attr_reader :title, :stream, :logger, :result, :canceled, :started_at, :ended_at, :error
 
     def self.execute(title, options = {}, &block)
       self.new(title, options).execute(&block)
@@ -13,6 +13,7 @@ module Dekiru
     def initialize(title, options = {})
       @title = title
       @options = options
+      @logger = @options[:logger] || Logger.new(Rails.root.join("log/data_migration_#{title.gsub(/[[:space:]]/, '')}.log"))
       @stream = @options.fetch(:output, $stdout)
       @without_transaction = @options.fetch(:without_transaction, false)
       @side_effects = Hash.new do |hash, key|
@@ -31,6 +32,7 @@ module Dekiru
 
         @result = ActiveRecord::Base.transaction do
           run(&block)
+          log "Finished execution: #{title}"
           confirm?("\nAre you sure to commit?")
         end
       end
@@ -75,6 +77,7 @@ module Dekiru
 
     def log(message)
       stream.puts(message)
+      logger.info(message.squish)
     end
 
     def confirm?(message = 'Are you sure?')
@@ -92,7 +95,7 @@ module Dekiru
     end
 
     def newline
-      log ''
+      stream.puts('')
     end
 
     def cancel!

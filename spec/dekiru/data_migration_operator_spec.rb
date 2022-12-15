@@ -28,7 +28,7 @@ describe Dekiru::DataMigrationOperator do
   end
   let(:without_transaction) { false }
   let(:operator) do
-    op = Dekiru::DataMigrationOperator.new('dummy', output: dummy_stream, without_transaction: without_transaction)
+    op = Dekiru::DataMigrationOperator.new('dummy', output: dummy_stream, logger: Logger.new(nil), without_transaction: without_transaction)
     allow(op).to receive(:current_transaction_open?) { false }
     op
   end
