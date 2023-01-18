@@ -21,10 +21,11 @@ module Dekiru
   end
 
   class Configuration
-    attr_accessor :mail_security_hook
+    attr_accessor :mail_security_hook, :maintenance_script_directory
 
     def initialize
       @mail_security_hook = false # default
+      @maintenance_script_directory = 'scripts'
     end
   end
 end
