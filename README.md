@@ -182,6 +182,25 @@ Deliverd Mailers!!
 Are you sure to commit? (yes/no) > yes
 ```
 
+ジェネレータを使って `Dekiru::DataMigrationOperator` を使ったメンテナンススクリプトを生成することができます。ファイル名にはスクリプトファイルを生成した日付が prefix として付与されます。
+
+```
+$ bin/rails g maintenance_script demo_migration
+$ cat scripts/20230118_demo_migration.rb
+Dekiru::DataMigrationOperator.execute('demo_migration') do
+  # write here
+end
+```
+
+ファイルの出力先ディレクトリは、デフォルトではアプリケーションルート直下の `scripts` ディレクトリです。設定で出力先ディレクトリを変更することもできます。
+
+```ruby
+# config/initializer/dekiru.rb
+Dekiru.configure do |config|
+  config.maintenance_script_directory = 'scripts/maintenance'
+end
+```
+
 ## Refinements
 
 ### Dekiru::CamelizeHash
