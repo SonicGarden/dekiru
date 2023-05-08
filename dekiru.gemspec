@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 3.0.0'
 
-  gem.add_dependency 'http_accept_language', '>= 2.0.0'
   gem.add_dependency 'rails', '>= 6.1'
   gem.add_dependency 'ruby-progressbar'
   gem.add_development_dependency 'rake'
