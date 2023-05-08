@@ -19,10 +19,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Dekiru::VERSION
 
-  gem.required_ruby_version = '>= 2.7.0'
+  gem.required_ruby_version = '>= 3.0.0'
 
   gem.add_dependency 'http_accept_language', '>= 2.0.0'
-  gem.add_dependency 'rails', '>= 6.0'
+  gem.add_dependency 'rails', '>= 6.1'
   gem.add_dependency 'ruby-progressbar'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
