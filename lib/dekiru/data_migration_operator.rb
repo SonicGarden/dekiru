@@ -61,12 +61,12 @@ module Dekiru
         total: total || target_scope.count,
         output: stream
       )
-      pb = ::ProgressBar.create(opt)
+      @pb = ::ProgressBar.create(opt)
       target_scope.find_each do |target|
         yield target
-        pb.increment
+        @pb.increment
       end
-      pb.finish
+      @pb.finish
     end
 
     private
@@ -76,7 +76,12 @@ module Dekiru
     end
 
     def log(message)
-      stream.puts(message)
+      if @pb && !@pb.finished?
+        @pb.log(message)
+      else
+        stream.puts(message)
+      end
+
       logger&.info(message.squish)
     end
 
