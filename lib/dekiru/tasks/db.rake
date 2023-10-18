@@ -4,7 +4,7 @@ namespace :db do
     task check_conflict: :environment do
       migrations_status =
         if ActiveRecord::Base.connection.respond_to?(:migration_context)
-          ActiveRecord::Base.connection.migration_context.migrations_status
+          ActiveRecord::Base.connection.migration_context.current_version.zero? ? [] : ActiveRecord::Base.connection.migration_context.migrations_status
         else
           paths = ActiveRecord::Tasks::DatabaseTasks.migrations_paths
           ActiveRecord::Migrator.migrations_status(paths)
