@@ -53,20 +53,29 @@ module Dekiru
       ((self.ended_at || Time.current) - self.started_at)
     end
 
-    def find_each_with_progress(target_scope, options = {})
-      total = options.delete(:total)
-      opt = {
-        format: '%a |%b>>%i| %p%% %t',
-      }.merge(options).merge(
-        total: total || target_scope.count,
-        output: stream
-      )
-      @pb = ::ProgressBar.create(opt)
-      target_scope.find_each do |target|
-        yield target
+    def with_progress(enum, options = {})
+      options = options.dup
+      options[:total] ||= ((enum.size == Float::INFINITY ? nil : enum.size) rescue nil)
+      options[:format] ||= options[:total] ? '%a |%b>>%i| %p%% %t' : '%a |%b>>%i| ??%% %t'
+      options[:output] ||= stream
+
+      @pb = ::ProgressBar.create(options)
+      enum.each do |item|
+        yield item
         @pb.increment
       end
       @pb.finish
+    end
+
+    def find_each_with_progress(target_scope, options = {}, &block)
+      enum =
+        if target_scope.is_a?(ActiveRecord::Batches)
+          target_scope.find_each
+        else
+          # ActiveRecord由来のfind_eachでないと思われる場合は明示的にenumeratorに変換
+          target_scope.enum_for(:find_each)
+        end
+      with_progress(enum, options, &block)
     end
 
     private
