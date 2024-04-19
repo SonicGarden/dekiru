@@ -53,11 +53,11 @@ module Dekiru
       ((self.ended_at || Time.current) - self.started_at)
     end
 
-    def with_progress(enum, options = {})
+    def each_with_progress(enum, options = {})
       options = options.dup
       options[:total] ||= ((enum.size == Float::INFINITY ? nil : enum.size) rescue nil)
       options[:format] ||= options[:total] ? '%a |%b>>%i| %p%% %t' : '%a |%b>>%i| ??%% %t'
-      options[:output] ||= stream
+      options[:output] = stream
 
       @pb = ::ProgressBar.create(options)
       enum.each do |item|
@@ -68,14 +68,9 @@ module Dekiru
     end
 
     def find_each_with_progress(target_scope, options = {}, &block)
-      enum =
-        if target_scope.is_a?(ActiveRecord::Batches)
-          target_scope.find_each
-        else
-          # ActiveRecord由来のfind_eachでないと思われる場合は明示的にenumeratorに変換
-          target_scope.enum_for(:find_each)
-        end
-      with_progress(enum, options, &block)
+      # `LocalJumpError: no block given (yield)` が出る場合、 find_each メソッドが enumerator を返していない可能性があります
+      # 直接 each_with_progress を使うか、 find_each が enumerator を返すように修正してください
+      each_with_progress(target_scope.find_each, options, &block)
     end
 
     private

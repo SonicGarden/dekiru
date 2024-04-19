@@ -106,17 +106,38 @@ describe Dekiru::DataMigrationOperator do
     end
   end
 
-  describe '#find_each_with_progress' do
+  describe '#each_with_progress' do
     it '進捗が表示される' do
+      record = (0...10)
+
+      allow(STDIN).to receive(:gets) do
+        "yes\n"
+      end
+
+      sum = 0
+      operator.execute do
+        each_with_progress(record, title: 'count up number') do |num|
+          sum += num
+        end
+      end
+
+      expect(sum).to eq(45)
+      expect(operator.result).to eq(true)
+      expect(operator.error).to eq(nil)
+      expect(operator.stream.out).to include('Are you sure to commit?')
+      expect(operator.stream.out).to include('count up number:')
+      expect(operator.stream.out).to include('Finished successfully:')
+      expect(operator.stream.out).to include('Total time:')
+    end
+
+    it 'total をオプションで渡すことができる' do
       class Dekiru::DummyRecord
         def self.count
-          10
+          raise "won't call"
         end
 
-        def self.find_each
-          (0...count).to_a.each do |num|
-            yield(num)
-          end
+        def self.each
+          yield 99
         end
       end
 
@@ -126,7 +147,34 @@ describe Dekiru::DataMigrationOperator do
 
       sum = 0
       operator.execute do
-        find_each_with_progress(Dekiru::DummyRecord, title: 'count up number') do |num|
+        each_with_progress(Dekiru::DummyRecord, title: 'pass total as option', total: 1) do |num|
+          sum += num
+        end
+      end
+
+      expect(sum).to eq(99)
+      expect(operator.result).to eq(true)
+      expect(operator.error).to eq(nil)
+      expect(operator.stream.out).to include('Are you sure to commit?')
+      expect(operator.stream.out).to include('pass total as option:')
+      expect(operator.stream.out).to include('Finished successfully:')
+      expect(operator.stream.out).to include('Total time:')
+    end
+  end
+
+  describe '#find_each_with_progress' do
+    it '進捗が表示される' do
+      record = (0...10).to_a.tap do |r|
+        r.singleton_class.alias_method(:find_each, :each)
+      end
+
+      allow(STDIN).to receive(:gets) do
+        "yes\n"
+      end
+
+      sum = 0
+      operator.execute do
+        find_each_with_progress(record, title: 'count up number') do |num|
           sum += num
         end
       end
@@ -147,7 +195,11 @@ describe Dekiru::DataMigrationOperator do
         end
 
         def self.find_each
-          yield 99
+          if block_given?
+            yield 99
+          else
+            Enumerator.new { |y| y << 99 }
+          end
         end
       end
 
