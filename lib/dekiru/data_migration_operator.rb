@@ -53,20 +53,24 @@ module Dekiru
       ((self.ended_at || Time.current) - self.started_at)
     end
 
-    def find_each_with_progress(target_scope, options = {})
-      total = options.delete(:total)
-      opt = {
-        format: '%a |%b>>%i| %p%% %t',
-      }.merge(options).merge(
-        total: total || target_scope.count,
-        output: stream
-      )
-      @pb = ::ProgressBar.create(opt)
-      target_scope.find_each do |target|
-        yield target
+    def each_with_progress(enum, options = {})
+      options = options.dup
+      options[:total] ||= ((enum.size == Float::INFINITY ? nil : enum.size) rescue nil)
+      options[:format] ||= options[:total] ? '%a |%b>>%i| %p%% %t' : '%a |%b>>%i| ??%% %t'
+      options[:output] = stream
+
+      @pb = ::ProgressBar.create(options)
+      enum.each do |item|
+        yield item
         @pb.increment
       end
       @pb.finish
+    end
+
+    def find_each_with_progress(target_scope, options = {}, &block)
+      # `LocalJumpError: no block given (yield)` が出る場合、 find_each メソッドが enumerator を返していない可能性があります
+      # 直接 each_with_progress を使うか、 find_each が enumerator を返すように修正してください
+      each_with_progress(target_scope.find_each, options, &block)
     end
 
     private
