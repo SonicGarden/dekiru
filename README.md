@@ -25,7 +25,7 @@ Or install it yourself as:
 ```ruby
 require 'dekiru/capybara/helpers'
 RSpec.configure do |config|
-  config.include Dekiru::Capybara::Helpers, type: :feature
+  config.include Dekiru::Capybara::Helpers, type: :system
 end
 ```
 
@@ -55,7 +55,7 @@ wait_for_element_position_stable(element)
 ```ruby
 require 'dekiru/capybara/matchers'
 RSpec.configure do |config|
-  config.include Dekiru::Capybara::Matchers, type: :feature
+  config.include Dekiru::Capybara::Matchers, type: :system
 end
 ```
 
@@ -64,7 +64,7 @@ end
 ```ruby
 # javascriptエラーがあったらテスト失敗するように
 RSpec.configure do |config|
-  config.after(:each, type: :feature) do |example|
+  config.after(:each, type: :system) do |example|
     if example.metadata[:js] == true
       expect(page).to have_no_js_errors
     end
