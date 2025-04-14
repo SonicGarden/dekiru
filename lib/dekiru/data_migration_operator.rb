@@ -30,7 +30,7 @@ module Dekiru
       else
         raise NestedTransactionError if current_transaction_open?
 
-        @result = ActiveRecord::Base.transaction do
+        @result = transaction_provider.within_transaction do
           run(&block)
           log "Finished execution: #{title}"
           confirm?("\nAre you sure to commit?")
@@ -74,10 +74,6 @@ module Dekiru
     end
 
     private
-
-    def current_transaction_open?
-      ActiveRecord::Base.connection.current_transaction.open?
-    end
 
     def log(message)
       if @pb && !@pb.finished?
@@ -148,5 +144,11 @@ module Dekiru
         instance_eval(&block)
       end
     end
+
+    def transaction_provider
+      Dekiru.configuration.transaction_provider
+    end
+
+    delegate :current_transaction_open?, to: :transaction_provider
   end
 end
