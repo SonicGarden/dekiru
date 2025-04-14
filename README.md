@@ -201,6 +201,46 @@ Dekiru.configure do |config|
 end
 ```
 
+### Dekiru::TransactionProvider
+
+`Dekiru::DataMigrationOperator` を使うスクリプトにおいて、複数データベースへの書き込みが必要な場合など、`ActiveRecord::Base.transaction` によるトランザクション開始だけでは不十分な場合があります。`Dekiru::TransactionProvider` を実装することで `Dekiru::DataMigrationOperator` のトランザクション開始の挙動をカスタマイズすることができます。
+
+以下のようなアプリケーションコードがあるとします。
+
+```ruby
+class LegacyRecord < ApplicationRecord
+  connects_to database: { writing: :legacy, reading: :legacy }
+end
+
+class ApplicationRecord < ActiveRecord::Base
+  connects_to database: { writing: :primary, reading: :primary }
+
+  def self.with_legacy_transaction
+    ActiveRecord::Base.transaction do
+      LegacyRecord.transaction do
+        yield
+      end
+    end
+  end
+end
+```
+
+`Dekiru::DataMigrationOperator` においても `ApplicationRecord.with_legacy_transaction` を使ってトランザクション開始するために、以下のような設定を用意します。
+
+```ruby
+# config/initializer/dekiru.rb
+class MyTransactionProvider < Dekiru::TransactionProvider
+  def within_transaction(&)
+    ApplicationRecord.with_legacy_transaction(&)
+  end
+end
+
+Dekiru.configure do |config|
+  config.transaction_provider = MyTransactionProvider.new
+end
+```
+
+
 ## Refinements
 
 ### Dekiru::CamelizeHash
