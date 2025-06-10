@@ -1,3 +1,4 @@
-Dekiru::DataMigrationOperator.execute('<%= @name %>') do
+<% if @prefix.present? %><%= @prefix %>
+<% end %>Dekiru::DataMigrationOperator.execute('<%= @name %>') do
   # write here
 end

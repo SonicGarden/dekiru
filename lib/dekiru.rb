@@ -21,7 +21,7 @@ module Dekiru
   end
 
   class Configuration
-    attr_accessor :mail_security_hook, :maintenance_script_directory, :transaction_provider
+    attr_accessor :mail_security_hook, :maintenance_script_directory, :transaction_provider, :maintenance_script_prefix
 
     def initialize
       @mail_security_hook = false # default
