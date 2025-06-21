@@ -22,7 +22,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 3.1.0'
 
   gem.add_dependency 'rails', '>= 7.0'
-  gem.add_dependency 'ruby-progressbar'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rubocop'
