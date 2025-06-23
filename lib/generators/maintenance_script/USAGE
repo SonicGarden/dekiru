@@ -1,8 +1,0 @@
-Description:
-    Create database maintenance script using Dekiru::DataMigrationOperator
-
-Example:
-    rails generate maintenance_script UpdateUserName
-
-    This will create:
-        scripts/XXX_update_user_name.rb
