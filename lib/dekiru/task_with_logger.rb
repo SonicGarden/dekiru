@@ -13,6 +13,7 @@ module TaskWithLogger
   end
 
   def echo(str)
+    Dekiru.deprecator.warn("TaskWithLogger is deprecated. If necessary, copy it to your project and use it.")
     Rails.logger.info(str)
     puts(str)
   end

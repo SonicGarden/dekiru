@@ -109,19 +109,6 @@ Rails.application.load_tasks
 Rake::Task['db:migrate'].enhance(['db:migrate:check_conflict']) if Rails.env.development?
 ```
 
-## Mail Security Hook
-
-以下の設定をすると、宛先を指定しないメールを配信しようとした時に`Dekiru::MailSecurityInterceptor::NoToAdreessError`例外を発生させる。
-
-※ to に空文字や空配列を指定してメールを配信しようとすると、bcc 内のアドレスが to に転記されるといった問題がある。これを未然に防ぐことができる。
-
-```ruby
-# config/initializer/dekiru.rb
-Dekiru.configure do |config|
-  config.mail_security_hook = true # default: false
-end
-```
-
 ## Data Migration Operator
 
 For data migration operations, please use the separate [`dekiru-data_migration` gem](https://github.com/SonicGarden/dekiru-data_migration) which provides the `Dekiru::DataMigrationOperator` functionality.

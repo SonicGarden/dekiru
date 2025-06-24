@@ -16,13 +16,23 @@ module Dekiru
     def configuration
       @configuration ||= Configuration.new
     end
+
+    def deprecator
+      @deprecator ||= ActiveSupport::Deprecation.new('1.2', 'Dekiru')
+    end
   end
 
   class Configuration
-    attr_accessor :mail_security_hook
+    attr_reader :mail_security_hook
 
     def initialize
       @mail_security_hook = false # default
+    end
+
+    def mail_security_hook=(value)
+      Dekiru.deprecator.warn('Dekiru.configuration.mail_security_hook is deprecated. If necessary, implement it yourself using after_action.')
+
+      @mail_security_hook = value
     end
   end
 end
