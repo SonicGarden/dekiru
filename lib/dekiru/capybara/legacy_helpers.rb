@@ -3,6 +3,10 @@ module Dekiru
     module LegacyHelpers
       class Error < StandardError; end
 
+      def self.included(base)
+        Dekiru.deprecator.warn("#{self} is deprecated. If necessary, copy it to your project and use it.")
+      end
+
       def wait_for_event(event)
         page.execute_script(<<~"EOS")
           (function(){
