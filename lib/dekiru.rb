@@ -3,6 +3,7 @@ require 'dekiru/railtie' if defined?(::Rails)
 require 'dekiru/helper'
 require 'dekiru/mail_security_interceptor'
 require 'dekiru/camelize_hash'
+require 'dekiru/data_migration'
 
 require 'active_support'
 require 'active_support/all'
