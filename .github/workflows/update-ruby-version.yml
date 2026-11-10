@@ -1,0 +1,48 @@
+# Dependabot は .ruby-version を更新できないため、最新の安定版 Ruby への更新をこのワークフローで行う。
+# GITHUB_TOKEN で作った PR では rspec.yml が起動しないので、テストもこのワークフロー内で実行してからマージする。
+name: Update .ruby-version
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  # gem のインストール・実行を伴うため、書き込み権限を持たせない
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - name: Check latest Ruby version
+        id: check
+        uses: SonicGarden/composite-actions/update-ruby-version/check@main
+
+      # ruby-version を省略して .ruby-version を読ませ、更新後のバージョンそのものでテストする
+      - name: Set up Ruby
+        if: steps.check.outputs.changed == 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run rspec
+        if: steps.check.outputs.changed == 'true'
+        run: bundle exec rspec
+
+  merge:
+    needs: test
+    if: needs.test.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Create and merge pull request
+        uses: SonicGarden/composite-actions/update-ruby-version/merge@main
+        with:
+          version: ${{ needs.test.outputs.version }}
